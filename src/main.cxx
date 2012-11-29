@@ -52,6 +52,7 @@ struct Entry {
   Mat       img;
   string    classname;
   KeyPoints keypoints;
+  Mat       descriptors;
 };
 
 static vector<Entry>      training_set;
@@ -84,6 +85,15 @@ int main (int argc, char** argv) {
   cout << "Loading training set..." << endl;
   load_training_set();
 
+  SurfFeatureDetector     detector(400);
+  SurfDescriptorExtractor extractor;
+
+  cout << "Detecting key points and extracting descriptors..." << endl;
+  for (vector<Entry>::iterator it = training_set.begin();
+       it != training_set.end(); ++it) {
+    detector.detect(it->img, it->keypoints);
+    extractor.compute(it->img, it->keypoints, it->descriptors);
+  }
 
   cout << "BYEBYE" << endl;
 
