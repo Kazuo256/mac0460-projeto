@@ -1,13 +1,26 @@
 
 #include <cstdio>
+
+#include <iostream>
+#include <fstream>
 #include <vector>
+#include <utility>
+#include <string>
 
 #include <opencv2/core/core.hpp>
 #include <opencv2/features2d/features2d.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/nonfree/nonfree.hpp>
 
+using std::string;
 using std::vector;
+using std::pair;
+using std::make_pair;
+
+using std::ifstream;
+using std::ios_base;
+using std::cout;
+using std::endl;
 
 using cv::Mat;
 using cv::KeyPoint;
@@ -25,25 +38,52 @@ using cv::waitKey;
 using cv::NORM_L2;
 
 static void help () {
-    printf("\nThis program demonstrates using features2d detector, descriptor extractor and simple matcher\n"
-            "Using the SURF desriptor:\n"
-            "\n"
-            "Usage:\n matcher_simple <image1> <image2>\n");
+  printf("\nThis program demonstrates using features2d detector, descriptor extractor and simple matcher\n"
+          "Using the SURF desriptor:\n"
+          "\n"
+          "Usage:\n matcher_simple <image1> <image2>\n");
+}
+
+typedef pair<Mat,string> Entry;
+
+static vector<Entry> training_set;
+
+string get_dir (const string& str) {
+  size_t found = str.find_last_of("/\\");
+  string total_dir = str.substr(0,found);
+  found = total_dir.find_last_of("/\\");
+  return total_dir.substr(found+1);
+}
+
+static void load_training_set () {
+  ifstream file("training.set", ios_base::in);
+  while (file.good()) {
+    string img_path;
+    file >> img_path;
+    string class_name = get_dir(img_path);
+    Mat img = imread(img_path, CV_LOAD_IMAGE_GRAYSCALE);
+    training_set.push_back(make_pair(img, class_name));
+  }
 }
 
 int main (int argc, char** argv) {
-    if(argc != 3)
-    {
-        help();
-        return -1;
-    }
+  //if (argc != 3) {
+  //  help();
+  //  return -1;
+  //}
+
+  cout << "Loading training set..." << endl;
+  load_training_set();
+
+  cout << "BYEBYE" << endl;
+
+  if (false) {
 
     Mat img1 = imread(argv[1], CV_LOAD_IMAGE_GRAYSCALE);
     Mat img2 = imread(argv[2], CV_LOAD_IMAGE_GRAYSCALE);
-    if(img1.empty() || img2.empty())
-    {
-        printf("Can't read one of the images\n");
-        return -1;
+    if (img1.empty() || img2.empty()) {
+      printf("Can't read one of the images\n");
+      return -1;
     }
 
     // detecting keypoints
@@ -70,5 +110,7 @@ int main (int argc, char** argv) {
     imshow("matches", img_matches);
     waitKey(0);
 
-    return 0;
+  }
+
+  return 0;
 }
