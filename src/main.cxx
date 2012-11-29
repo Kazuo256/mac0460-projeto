@@ -27,6 +27,7 @@ using cv::KeyPoint;
 
 using cv::SurfFeatureDetector;
 using cv::SurfDescriptorExtractor;
+using cv::BOWKMeansTrainer;
 using cv::BFMatcher;
 using cv::DMatch;
 
@@ -87,13 +88,20 @@ int main (int argc, char** argv) {
 
   SurfFeatureDetector     detector(400);
   SurfDescriptorExtractor extractor;
+  Mat                     training_descriptors;
 
   cout << "Detecting key points and extracting descriptors..." << endl;
   for (vector<Entry>::iterator it = training_set.begin();
        it != training_set.end(); ++it) {
     detector.detect(it->img, it->keypoints);
     extractor.compute(it->img, it->keypoints, it->descriptors);
+    training_descriptors.push_back(it->descriptors);
   }
+
+  cout << "Generating vocabulary..." << endl;
+  BOWKMeansTrainer bowtrainer(1000); //num clusters
+  bowtrainer.add(training_descriptors);
+  Mat vocabulary = bowtrainer.cluster();
 
   cout << "BYEBYE" << endl;
 
