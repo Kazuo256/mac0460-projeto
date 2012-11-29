@@ -44,11 +44,20 @@ static void help () {
           "Usage:\n matcher_simple <image1> <image2>\n");
 }
 
-typedef pair<Mat,string> Entry;
+typedef vector<KeyPoint> KeyPoints;
 
-static vector<Entry> training_set;
+struct Entry {
+  Entry (const Mat& dah_img, const string& dah_classname) :
+    img(dah_img), classname(dah_classname) {}
+  Mat       img;
+  string    classname;
+  KeyPoints keypoints;
+};
 
-string get_dir (const string& str) {
+static vector<Entry>      training_set;
+static vector<KeyPoints>  entry_keypoints;
+
+static string get_dir (const string& str) {
   size_t found = str.find_last_of("/\\");
   string total_dir = str.substr(0,found);
   found = total_dir.find_last_of("/\\");
@@ -62,7 +71,7 @@ static void load_training_set () {
     file >> img_path;
     string class_name = get_dir(img_path);
     Mat img = imread(img_path, CV_LOAD_IMAGE_GRAYSCALE);
-    training_set.push_back(make_pair(img, class_name));
+    training_set.push_back(Entry(img, class_name));
   }
 }
 
@@ -74,6 +83,7 @@ int main (int argc, char** argv) {
 
   cout << "Loading training set..." << endl;
   load_training_set();
+
 
   cout << "BYEBYE" << endl;
 
