@@ -22,13 +22,19 @@ using std::ios_base;
 using std::cout;
 using std::endl;
 
+using cv::Ptr;
 using cv::Mat;
 using cv::KeyPoint;
 
+using cv::FeatureDetector;
+using cv::DescriptorExtractor;
+using cv::DescriptorMatcher;
 using cv::SurfFeatureDetector;
 using cv::SurfDescriptorExtractor;
 using cv::BOWKMeansTrainer;
+using cv::BOWImgDescriptorExtractor;
 using cv::BFMatcher;
+using cv::FlannBasedMatcher;
 using cv::DMatch;
 
 using cv::imread;
@@ -54,6 +60,7 @@ struct Entry {
   string    classname;
   KeyPoints keypoints;
   Mat       descriptors;
+  Mat       histogram;
 };
 
 static vector<Entry>      training_set;
@@ -86,22 +93,38 @@ int main (int argc, char** argv) {
   cout << "Loading training set..." << endl;
   load_training_set();
 
-  SurfFeatureDetector     detector(400);
-  SurfDescriptorExtractor extractor;
-  Mat                     training_descriptors;
+  Ptr<FeatureDetector>      detector(new SurfFeatureDetector(400));
+  Ptr<DescriptorExtractor>  extractor(new SurfDescriptorExtractor);
+  Mat                       training_descriptors;
 
   cout << "Detecting key points and extracting descriptors..." << endl;
   for (vector<Entry>::iterator it = training_set.begin();
        it != training_set.end(); ++it) {
-    detector.detect(it->img, it->keypoints);
-    extractor.compute(it->img, it->keypoints, it->descriptors);
+    detector->detect(it->img, it->keypoints);
+    extractor->compute(it->img, it->keypoints, it->descriptors);
     training_descriptors.push_back(it->descriptors);
   }
 
   cout << "Generating vocabulary..." << endl;
-  BOWKMeansTrainer bowtrainer(1000); //num clusters
-  bowtrainer.add(training_descriptors);
-  Mat vocabulary = bowtrainer.cluster();
+  BOWKMeansTrainer trainer(1000); //num clusters
+  trainer.add(training_descriptors);
+  Mat vocabulary = trainer.cluster();
+
+  Ptr<DescriptorMatcher>          matcher(new FlannBasedMatcher);
+  Ptr<BOWImgDescriptorExtractor>  hist_extractor(
+    new BOWImgDescriptorExtractor(extractor, matcher)
+  );
+
+  cout << "Setting vocabulary..." << endl;
+  hist_extractor->setVocabulary(vocabulary);
+
+  cout << "Extracting histograms..." << endl;
+  for (vector<Entry>::iterator it = training_set.begin();
+       it != training_set.end(); ++it) {
+    KeyPoints keypoints;
+    detector->detect(it->img, keypoints);
+    hist_extractor->compute(it->img, keypoints, it->histogram);
+  }
 
   cout << "BYEBYE" << endl;
 
