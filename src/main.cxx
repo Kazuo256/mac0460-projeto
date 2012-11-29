@@ -1,21 +1,37 @@
-#include <stdio.h>
-#include "opencv2/core/core.hpp"
-#include "opencv2/features2d/features2d.hpp"
-#include "opencv2/highgui/highgui.hpp"
-#include "opencv2/nonfree/nonfree.hpp"
 
-using namespace cv;
+#include <cstdio>
+#include <vector>
 
-static void help()
-{
+#include <opencv2/core/core.hpp>
+#include <opencv2/features2d/features2d.hpp>
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/nonfree/nonfree.hpp>
+
+using std::vector;
+
+using cv::Mat;
+using cv::KeyPoint;
+
+using cv::SurfFeatureDetector;
+using cv::SurfDescriptorExtractor;
+using cv::BFMatcher;
+using cv::DMatch;
+
+using cv::imread;
+using cv::namedWindow;
+using cv::drawMatches;
+using cv::waitKey;
+
+using cv::NORM_L2;
+
+static void help () {
     printf("\nThis program demonstrates using features2d detector, descriptor extractor and simple matcher\n"
             "Using the SURF desriptor:\n"
             "\n"
             "Usage:\n matcher_simple <image1> <image2>\n");
 }
 
-int main(int argc, char** argv)
-{
+int main (int argc, char** argv) {
     if(argc != 3)
     {
         help();
