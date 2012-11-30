@@ -25,6 +25,7 @@ using std::pair;
 using std::make_pair;
 
 using std::ifstream;
+using std::ofstream;
 using std::ios_base;
 using std::getline;
 using std::cout;
@@ -87,6 +88,7 @@ static void load_training_set () {
     if (class_labels.count(class_name) == 0)
       class_labels[class_name] = next_label++;
   }
+  file.close();
 }
 
 static time_t last = 0, current = 0;
@@ -97,6 +99,54 @@ static void print_done () {
   cout << sep << "Done in" << sep << (current-last) << sep << "seconds.";
   cout << endl;
   last = current;
+}
+
+static void write_vocabulary (const string& filename, const Mat& vocabulary) {
+  ofstream output(filename.c_str(), ios_base::out);
+  output << vocabulary.rows << " " << vocabulary.cols << endl;
+  for (int i = 0; i < vocabulary.rows; ++i) {
+    for (int j = 0; j < vocabulary.cols; ++j)
+      output << vocabulary.at<float>(i,j) << " ";
+    output << endl;
+  }
+  output.close();
+}
+
+static void read_vocabulary (const string& filename, Mat& vocabulary) {
+  ifstream input(filename.c_str(), ios_base::in);
+  size_t rows, cols;
+  input >> rows >> cols;
+  vocabulary.create(rows, cols, 5);
+  for (int i = 0; i < vocabulary.rows; ++i) {
+    for (int j = 0; j < vocabulary.cols; ++j)
+    input >> vocabulary.at<float>(i,j);
+  }
+}
+
+template <typename T>
+static void train (const Mat& vocabulary, T& classifier) {
+  Mat samples, samples_32f,
+      labels;
+
+  cout << "Preparing samples and labels...";
+  cout.flush();
+  for (vector<Entry>::iterator it = training_set.begin();
+       it != training_set.end(); ++it) {
+    samples.push_back(it->histogram);
+    labels.push_back(Mat(1,1,CV_32F,class_labels[it->classname]));
+  }
+  samples.convertTo(samples_32f, CV_32F);
+  print_done();
+
+  cout << "Training classifier...";
+  cout.flush();
+  classifier.train(samples_32f, labels);
+  print_done();
+
+  cout << "Writing classifier to file...";
+  cout.flush();
+  classifier.save("SURF_SURF_BAYES.xml");
+  print_done();
 }
 
 int main (int argc, char** argv) {
@@ -126,12 +176,26 @@ int main (int argc, char** argv) {
   }
   print_done();
 
-  cout << "Generating vocabulary...";
-  cout.flush();
-  BOWKMeansTrainer trainer(256); //num clusters
-  trainer.add(training_descriptors);
-  Mat vocabulary = trainer.cluster();
-  print_done();
+  Mat vocabulary;
+
+  if (ifstream("SURF_SURF.vocabulary", ios_base::in).fail()) {
+    cout << "Vocabulary not found." << endl;
+    cout << "Generating vocabulary...";
+    cout.flush();
+    BOWKMeansTrainer trainer(256); //num clusters
+    trainer.add(training_descriptors);
+    vocabulary = trainer.cluster();
+    print_done();
+    write_vocabulary("SURF_SURF.vocabulary", vocabulary);
+    cout << "\tType: " << vocabulary.type() << endl;
+    cout << "\tRows: " << vocabulary.rows << endl;
+    cout << "\tCols: " << vocabulary.cols << endl;
+  } else {
+    cout << "Loading vocabulary...";
+    cout.flush();
+    read_vocabulary("SURF_SURF.vocabulary", vocabulary);
+    print_done();
+  }
 
   Ptr<DescriptorMatcher>          matcher(new FlannBasedMatcher);
   Ptr<BOWImgDescriptorExtractor>  hist_extractor(
@@ -153,30 +217,43 @@ int main (int argc, char** argv) {
   }
   print_done();
 
-  Mat samples, samples_32f,
-      labels;
-
-  cout << "Preparing samples and labels...";
-  cout.flush();
-  for (vector<Entry>::iterator it = training_set.begin();
-       it != training_set.end(); ++it) {
-    samples.push_back(it->histogram);
-    labels.push_back(Mat(1,1,CV_32F,class_labels[it->classname]));
-  }
-  samples.convertTo(samples_32f, CV_32F);
-  print_done();
 
   CvNormalBayesClassifier classifier;
 
-  cout << "Training classifier...";
-  cout.flush();
-  classifier.train(samples_32f, labels);
-  print_done();
+  if (ifstream("SURF_SURF_BAYES.xml", ios_base::in).fail()) {
+    cout << "Classifier not found." << endl;
+    train(vocabulary, classifier);
+  }
+  else {
+    cout << "Loading classifier...";
+    cout.flush();
+    classifier.load("SURF_SURF_BAYES.xml");
+    cout << endl;
+  }
 
-  cout << "Writing classifier to file...";
-  cout.flush();
-  classifier.save("SURF_SURF_BAYES.xml");
-  print_done();
+  //Mat samples, samples_32f,
+  //    labels;
+
+  //cout << "Preparing samples and labels...";
+  //cout.flush();
+  //for (vector<Entry>::iterator it = training_set.begin();
+  //     it != training_set.end(); ++it) {
+  //  samples.push_back(it->histogram);
+  //  labels.push_back(Mat(1,1,CV_32F,class_labels[it->classname]));
+  //}
+  //samples.convertTo(samples_32f, CV_32F);
+  //print_done();
+
+
+  //cout << "Training classifier...";
+  //cout.flush();
+  //classifier.train(samples_32f, labels);
+  //print_done();
+
+  //cout << "Writing classifier to file...";
+  //cout.flush();
+  //classifier.save("SURF_SURF_BAYES.xml");
+  //print_done();
 
   cout << "BYEBYE" << endl;
 
