@@ -41,16 +41,9 @@ using cv::SurfFeatureDetector;
 using cv::SurfDescriptorExtractor;
 using cv::BOWKMeansTrainer;
 using cv::BOWImgDescriptorExtractor;
-using cv::BFMatcher;
 using cv::FlannBasedMatcher;
-using cv::DMatch;
 
 using cv::imread;
-using cv::namedWindow;
-using cv::drawMatches;
-using cv::waitKey;
-
-using cv::NORM_L2;
 
 static void help () {
   printf("\nThis program demonstrates using features2d detector, descriptor extractor and simple matcher\n"
@@ -135,7 +128,7 @@ int main (int argc, char** argv) {
 
   cout << "Generating vocabulary...";
   cout.flush();
-  BOWKMeansTrainer trainer(100); //num clusters
+  BOWKMeansTrainer trainer(256); //num clusters
   trainer.add(training_descriptors);
   Mat vocabulary = trainer.cluster();
   print_done();
@@ -149,10 +142,6 @@ int main (int argc, char** argv) {
   cout.flush();
   hist_extractor->setVocabulary(vocabulary);
   print_done();
-
-  //cout << "Vocabulary:" << endl
-  //     << "\tRows: " << vocabulary.rows << endl
-  //     << "\tColumns: " << vocabulary.cols << endl;
 
   cout << "Extracting histograms...";
   cout.flush();
@@ -173,12 +162,6 @@ int main (int argc, char** argv) {
        it != training_set.end(); ++it) {
     samples.push_back(it->histogram);
     labels.push_back(Mat(1,1,CV_32F,class_labels[it->classname]));
-    //cout << "Samples:" << endl
-    //     << "\tRows: " << samples.rows << endl
-    //     << "\tColumns: " << samples.cols << endl;
-    //cout << "Labels:" << endl
-    //     << "\tRows: " << labels.rows << endl
-    //     << "\tColumns: " << labels.cols << endl;
   }
   samples.convertTo(samples_32f, CV_32F);
   print_done();
@@ -196,41 +179,6 @@ int main (int argc, char** argv) {
   print_done();
 
   cout << "BYEBYE" << endl;
-
-  if (false) {
-
-    Mat img1 = imread(argv[1], CV_LOAD_IMAGE_GRAYSCALE);
-    Mat img2 = imread(argv[2], CV_LOAD_IMAGE_GRAYSCALE);
-    if (img1.empty() || img2.empty()) {
-      printf("Can't read one of the images\n");
-      return -1;
-    }
-
-    // detecting keypoints
-    SurfFeatureDetector detector(400);
-    vector<KeyPoint> keypoints1, keypoints2;
-    detector.detect(img1, keypoints1);
-    detector.detect(img2, keypoints2);
-
-    // computing descriptors
-    SurfDescriptorExtractor extractor;
-    Mat descriptors1, descriptors2;
-    extractor.compute(img1, keypoints1, descriptors1);
-    extractor.compute(img2, keypoints2, descriptors2);
-
-    // matching descriptors
-    BFMatcher matcher(NORM_L2);
-    vector<DMatch> matches;
-    matcher.match(descriptors1, descriptors2, matches);
-
-    // drawing the results
-    namedWindow("matches", 1);
-    Mat img_matches;
-    drawMatches(img1, keypoints1, img2, keypoints2, matches, img_matches);
-    imshow("matches", img_matches);
-    waitKey(0);
-
-  }
 
   return 0;
 }
