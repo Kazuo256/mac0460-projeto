@@ -65,7 +65,8 @@ struct Entry {
   Mat       histogram;
 };
 
-static vector<Entry>      training_set;
+static vector<Entry>      training_set,
+                          test_set;
 static map<string,float>  class_labels;
 static float              next_label = 0.0;
 
@@ -76,19 +77,27 @@ static string get_dir (const string& str) {
   return total_dir.substr(found+1);
 }
 
-static void load_training_set () {
-  ifstream file("training.set", ios_base::in);
+static void load_entryset (const string& filename, vector<Entry>& entryset) {
+  ifstream file(filename.c_str(), ios_base::in);
   while (!file.eof()) {
     string img_path;
     getline(file, img_path);
     if (img_path.size() == 0) continue;
     string class_name = get_dir(img_path);
     Mat img = imread(img_path, CV_LOAD_IMAGE_GRAYSCALE);
-    training_set.push_back(Entry(img, class_name));
+    entryset.push_back(Entry(img, class_name));
     if (class_labels.count(class_name) == 0)
       class_labels[class_name] = next_label++;
   }
   file.close();
+}
+
+static void load_training_set () {
+  load_entryset("training.set", training_set);
+}
+
+static void load_test_set () {
+  load_entryset("test.set", test_set);
 }
 
 static time_t last = 0, current = 0;
@@ -150,10 +159,6 @@ static void train (const Mat& vocabulary, T& classifier) {
 }
 
 int main (int argc, char** argv) {
-  //if (argc != 3) {
-  //  help();
-  //  return -1;
-  //}
 
   last = current = time(NULL);
 
@@ -217,7 +222,6 @@ int main (int argc, char** argv) {
   }
   print_done();
 
-
   CvNormalBayesClassifier classifier;
 
   if (ifstream("SURF_SURF_BAYES.xml", ios_base::in).fail()) {
@@ -231,29 +235,27 @@ int main (int argc, char** argv) {
     cout << endl;
   }
 
-  //Mat samples, samples_32f,
-  //    labels;
+  cout << "Loading test set...";
+  cout.flush();
+  load_test_set();
+  print_done();
 
-  //cout << "Preparing samples and labels...";
-  //cout.flush();
-  //for (vector<Entry>::iterator it = training_set.begin();
-  //     it != training_set.end(); ++it) {
-  //  samples.push_back(it->histogram);
-  //  labels.push_back(Mat(1,1,CV_32F,class_labels[it->classname]));
-  //}
-  //samples.convertTo(samples_32f, CV_32F);
-  //print_done();
-
-
-  //cout << "Training classifier...";
-  //cout.flush();
-  //classifier.train(samples_32f, labels);
-  //print_done();
-
-  //cout << "Writing classifier to file...";
-  //cout.flush();
-  //classifier.save("SURF_SURF_BAYES.xml");
-  //print_done();
+  size_t count = 0;
+  for (vector<Entry>::iterator it = test_set.begin();
+       it != test_set.end(); ++it) {
+    Mat hist;
+    vector<KeyPoint> keypoints;
+    detector->detect(it->img,keypoints);
+    hist_extractor->compute(it->img, keypoints, hist);
+    float answer = classifier.predict(hist);
+    float expected = class_labels[it->classname];
+    cout << (it-test_set.begin()) << ": ";
+    cout << answer << " (should be " << it->classname << ", label ";
+    cout << expected << ") ";
+    cout << ((answer==expected) ? (++count,"OHYES") : "MAMMAMIA") << endl;
+  }
+  cout << "Correctly classified: " << count << " (" << test_set.size() << ")";
+  cout << endl;
 
   cout << "BYEBYE" << endl;
 
