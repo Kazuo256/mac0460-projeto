@@ -167,9 +167,14 @@ int main (int argc, char** argv) {
   load_training_set();
   print_done();
 
-  Ptr<FeatureDetector>      detector(new SurfFeatureDetector(400));
-  Ptr<DescriptorExtractor>  extractor(new SurfDescriptorExtractor);
+  Ptr<FeatureDetector>      detector(FeatureDetector::create("SURF"));
+  Ptr<DescriptorExtractor>  extractor(DescriptorExtractor::create("SURF"));
   Mat                       training_descriptors;
+
+  if (detector.empty() || extractor.empty()) {
+    cout << "ERROR: Unable to create detector and/or extractor." << endl;
+    return 1;
+  }
 
   cout << "Detecting key points and extracting descriptors...";
   cout.flush();
