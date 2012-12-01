@@ -16,9 +16,11 @@
 #include <opencv2/ml/ml.hpp>
 
 #ifndef CLASSIFIER
-#define CLASSIFIER      CvNormalBayesClassifier
-#define CLASSIFIERNAME  "BAYES"
+#define CLASSIFIER bayes
 #endif
+
+#define CLASSIFIER_CONFIG(classifier) <classifier/config.h>
+#include CLASSIFIER_CONFIG(CLASSIFIER)
 
 using std::time_t;
 using std::time;
@@ -232,9 +234,9 @@ int main (int argc, char** argv) {
   }
   print_done();
 
-  CLASSIFIER classifier;
+  CLASSIFIER_T classifier;
 
-  if (ifstream("SURF_SURF_"CLASSIFIERNAME".xml", ios_base::in).fail()) {
+  if (ifstream("SURF_SURF_"CLASSIFIER_NAME".xml", ios_base::in).fail()) {
     cout << "Classifier not found." << endl;
     train(vocabulary, classifier);
   }
