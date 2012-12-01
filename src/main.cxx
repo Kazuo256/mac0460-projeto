@@ -159,10 +159,10 @@ static void train (const Mat& vocabulary, T& classifier) {
   classifier.train(samples_32f, labels);
   print_done();
 
-  cout << "Writing classifier to file...";
-  cout.flush();
-  classifier.save("SURF_SURF_BAYES.xml");
-  print_done();
+  //cout << "Writing classifier to file...";
+  //cout.flush();
+  //classifier.save("SURF_SURF_BAYES.xml");
+  //print_done();
 }
 
 int main (int argc, char** argv) {
@@ -259,7 +259,7 @@ int main (int argc, char** argv) {
     vector<KeyPoint> keypoints;
     detector->detect(it->img,keypoints);
     hist_extractor->compute(it->img, keypoints, hist);
-    float answer = classifier.predict(hist);
+    float answer = predict(classifier, hist);
     float expected = class_labels[it->classname];
     cout << (it-test_set.begin()) << ": ";
     cout << answer << " (should be " << it->classname << ", label ";
@@ -273,3 +273,4 @@ int main (int argc, char** argv) {
 
   return 0;
 }
+

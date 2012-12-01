@@ -20,3 +20,11 @@ set_target_properties (
   COMPILE_FLAGS "-DCLASSIFIER=bayes"
 )
 
+add_executable ( knn_classifier src/main.cxx )
+target_link_libraries ( knn_classifier ${OpenCV_LIBS} )
+set_target_properties (
+  knn_classifier
+  PROPERTIES
+  COMPILE_FLAGS "-DCLASSIFIER=knn"
+)
+
