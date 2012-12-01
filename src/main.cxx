@@ -159,10 +159,15 @@ static void train (const Mat& vocabulary, T& classifier) {
   classifier.train(samples_32f, labels);
   print_done();
 
-  //cout << "Writing classifier to file...";
-  //cout.flush();
-  //classifier.save("SURF_SURF_BAYES.xml");
-  //print_done();
+  try {
+    cout << "Writing classifier to file...";
+    cout.flush();
+    classifier.save("SURF_SURF_BAYES.xml");
+    print_done();
+  } catch (cv::Exception e) {
+    cout << "No support for writing classifiers to file." << endl;
+  }
+
 }
 
 int main (int argc, char** argv) {
@@ -204,9 +209,6 @@ int main (int argc, char** argv) {
     vocabulary = trainer.cluster();
     print_done();
     write_vocabulary("SURF_SURF.vocabulary", vocabulary);
-    cout << "\tType: " << vocabulary.type() << endl;
-    cout << "\tRows: " << vocabulary.rows << endl;
-    cout << "\tCols: " << vocabulary.cols << endl;
   } else {
     cout << "Loading vocabulary...";
     cout.flush();
