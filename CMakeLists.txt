@@ -10,8 +10,21 @@ include ( ${OpenCV_DIR}/OpenCVConfig.cmake )
 find_package ( OpenCV REQUIRED )
 
 include_directories ( src )
+add_definitions ( -ansi -pedantic -g -O3 )
 
-add_executable ( proj src/main.cxx )
-target_link_libraries ( proj ${OpenCV_LIBS} )
-set_target_properties ( proj PROPERTIES COMPILE_FLAGS "-ansi -pedantic -g -O3" )
+add_executable ( bayes_classifier src/main.cxx )
+target_link_libraries ( bayes_classifier ${OpenCV_LIBS} )
+set_target_properties (
+  bayes_classifier
+  PROPERTIES
+  COMPILE_FLAGS "-DCLASSIFIER=bayes"
+)
+
+add_executable ( knn_classifier src/main.cxx )
+target_link_libraries ( knn_classifier ${OpenCV_LIBS} )
+set_target_properties (
+  knn_classifier
+  PROPERTIES
+  COMPILE_FLAGS "-DCLASSIFIER=knn"
+)
 

@@ -15,6 +15,13 @@
 #include <opencv2/nonfree/nonfree.hpp>
 #include <opencv2/ml/ml.hpp>
 
+#ifndef CLASSIFIER
+#define CLASSIFIER bayes
+#endif
+
+#define CLASSIFIER_CONFIG(classifier) <classifier/config.h>
+#include CLASSIFIER_CONFIG(CLASSIFIER)
+
 using std::time_t;
 using std::time;
 
@@ -152,10 +159,15 @@ static void train (const Mat& vocabulary, T& classifier) {
   classifier.train(samples_32f, labels);
   print_done();
 
-  cout << "Writing classifier to file...";
-  cout.flush();
-  classifier.save("SURF_SURF_BAYES.xml");
-  print_done();
+  try {
+    cout << "Writing classifier to file...";
+    cout.flush();
+    classifier.save("SURF_SURF_BAYES.xml");
+    print_done();
+  } catch (cv::Exception e) {
+    cout << "No support for writing classifiers to file." << endl;
+  }
+
 }
 
 int main (int argc, char** argv) {
@@ -167,9 +179,14 @@ int main (int argc, char** argv) {
   load_training_set();
   print_done();
 
-  Ptr<FeatureDetector>      detector(new SurfFeatureDetector(400));
-  Ptr<DescriptorExtractor>  extractor(new SurfDescriptorExtractor);
+  Ptr<FeatureDetector>      detector(FeatureDetector::create("SURF"));
+  Ptr<DescriptorExtractor>  extractor(DescriptorExtractor::create("SURF"));
   Mat                       training_descriptors;
+
+  if (detector.empty() || extractor.empty()) {
+    cout << "ERROR: Unable to create detector and/or extractor." << endl;
+    return 1;
+  }
 
   cout << "Detecting key points and extracting descriptors...";
   cout.flush();
@@ -192,9 +209,6 @@ int main (int argc, char** argv) {
     vocabulary = trainer.cluster();
     print_done();
     write_vocabulary("SURF_SURF.vocabulary", vocabulary);
-    cout << "\tType: " << vocabulary.type() << endl;
-    cout << "\tRows: " << vocabulary.rows << endl;
-    cout << "\tCols: " << vocabulary.cols << endl;
   } else {
     cout << "Loading vocabulary...";
     cout.flush();
@@ -222,9 +236,9 @@ int main (int argc, char** argv) {
   }
   print_done();
 
-  CvNormalBayesClassifier classifier;
+  CLASSIFIER_T classifier;
 
-  if (ifstream("SURF_SURF_BAYES.xml", ios_base::in).fail()) {
+  if (ifstream("SURF_SURF_"CLASSIFIER_NAME".xml", ios_base::in).fail()) {
     cout << "Classifier not found." << endl;
     train(vocabulary, classifier);
   }
@@ -247,7 +261,7 @@ int main (int argc, char** argv) {
     vector<KeyPoint> keypoints;
     detector->detect(it->img,keypoints);
     hist_extractor->compute(it->img, keypoints, hist);
-    float answer = classifier.predict(hist);
+    float answer = predict(classifier, hist);
     float expected = class_labels[it->classname];
     cout << (it-test_set.begin()) << ": ";
     cout << answer << " (should be " << it->classname << ", label ";
@@ -261,3 +275,4 @@ int main (int argc, char** argv) {
 
   return 0;
 }
+
