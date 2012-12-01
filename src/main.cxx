@@ -15,6 +15,11 @@
 #include <opencv2/nonfree/nonfree.hpp>
 #include <opencv2/ml/ml.hpp>
 
+#ifndef CLASSIFIER
+#define CLASSIFIER      CvNormalBayesClassifier
+#define CLASSIFIERNAME  "BAYES"
+#endif
+
 using std::time_t;
 using std::time;
 
@@ -227,9 +232,9 @@ int main (int argc, char** argv) {
   }
   print_done();
 
-  CvNormalBayesClassifier classifier;
+  CLASSIFIER classifier;
 
-  if (ifstream("SURF_SURF_BAYES.xml", ios_base::in).fail()) {
+  if (ifstream("SURF_SURF_"CLASSIFIERNAME".xml", ios_base::in).fail()) {
     cout << "Classifier not found." << endl;
     train(vocabulary, classifier);
   }
