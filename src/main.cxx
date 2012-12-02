@@ -140,7 +140,7 @@ static void read_vocabulary (const string& filename, Mat& vocabulary) {
 }
 
 template <typename T>
-static void train (const Mat& vocabulary, T& classifier) {
+static void train (const Mat& vocabulary, T& classifier, const string& file) {
   Mat samples, samples_32f,
       labels;
 
@@ -162,7 +162,7 @@ static void train (const Mat& vocabulary, T& classifier) {
   try {
     cout << "Writing classifier to file...";
     cout.flush();
-    classifier.save("SURF_SURF_BAYES.xml");
+    classifier.save(file.c_str());
     print_done();
   } catch (cv::Exception e) {
     cout << "No support for writing classifiers to file." << endl;
@@ -172,15 +172,24 @@ static void train (const Mat& vocabulary, T& classifier) {
 
 int main (int argc, char** argv) {
 
+  if (argc != 3) {
+    cout << "Usage:" << endl;
+    cout << argv[0] << " <feature_detector> <descriptor_extractor" << endl;
+    return 1;
+  }
+
   last = current = time(NULL);
+
+  string detector_name = argv[1],
+         extractor_name = argv[2];
 
   cout << "Loading training set...";
   cout.flush();
   load_training_set();
   print_done();
 
-  Ptr<FeatureDetector>      detector(FeatureDetector::create("SURF"));
-  Ptr<DescriptorExtractor>  extractor(DescriptorExtractor::create("SURF"));
+  Ptr<FeatureDetector>      detector(FeatureDetector::create(detector_name));
+  Ptr<DescriptorExtractor>  extractor(DescriptorExtractor::create(extractor_name));
   Mat                       training_descriptors;
 
   if (detector.empty() || extractor.empty()) {
@@ -199,8 +208,9 @@ int main (int argc, char** argv) {
   print_done();
 
   Mat vocabulary;
+  string vocabulary_file = detector_name+"_"+extractor_name+".vocabulary";
 
-  if (ifstream("SURF_SURF.vocabulary", ios_base::in).fail()) {
+  if (ifstream(vocabulary_file.c_str(), ios_base::in).fail()) {
     cout << "Vocabulary not found." << endl;
     cout << "Generating vocabulary...";
     cout.flush();
@@ -208,11 +218,11 @@ int main (int argc, char** argv) {
     trainer.add(training_descriptors);
     vocabulary = trainer.cluster();
     print_done();
-    write_vocabulary("SURF_SURF.vocabulary", vocabulary);
+    write_vocabulary(vocabulary_file, vocabulary);
   } else {
     cout << "Loading vocabulary...";
     cout.flush();
-    read_vocabulary("SURF_SURF.vocabulary", vocabulary);
+    read_vocabulary(vocabulary_file, vocabulary);
     print_done();
   }
 
@@ -237,15 +247,17 @@ int main (int argc, char** argv) {
   print_done();
 
   CLASSIFIER_T classifier;
+  string classifier_file =
+    detector_name+"_"+extractor_name+"_"+CLASSIFIER_NAME+".xml";
 
-  if (ifstream("SURF_SURF_"CLASSIFIER_NAME".xml", ios_base::in).fail()) {
+  if (ifstream(classifier_file.c_str(), ios_base::in).fail()) {
     cout << "Classifier not found." << endl;
-    train(vocabulary, classifier);
+    train(vocabulary, classifier, classifier_file);
   }
   else {
     cout << "Loading classifier...";
     cout.flush();
-    classifier.load("SURF_SURF_BAYES.xml");
+    classifier.load(classifier_file.c_str());
     cout << endl;
   }
 
