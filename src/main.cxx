@@ -215,7 +215,9 @@ int main (int argc, char** argv) {
     cout << "Generating vocabulary...";
     cout.flush();
     BOWKMeansTrainer trainer(256); //num clusters
-    trainer.add(training_descriptors);
+    Mat training_descriptors_32f;
+    training_descriptors.convertTo(training_descriptors_32f, CV_32F);
+    trainer.add(training_descriptors_32f);
     vocabulary = trainer.cluster();
     print_done();
     write_vocabulary(vocabulary_file, vocabulary);
@@ -225,6 +227,7 @@ int main (int argc, char** argv) {
     read_vocabulary(vocabulary_file, vocabulary);
     print_done();
   }
+  cout << vocabulary.type() << "/" << CV_32F << "/" << CV_32S << endl;
 
   Ptr<DescriptorMatcher>          matcher(new FlannBasedMatcher);
   Ptr<BOWImgDescriptorExtractor>  hist_extractor(
