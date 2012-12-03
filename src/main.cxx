@@ -178,6 +178,12 @@ int main (int argc, char** argv) {
     return 1;
   }
 
+  cout << "=== Landmark Recognition Project ===" << endl;
+  cout << "Classifier: " << CLASSIFIER_NAME << endl;
+  cout << "Feature Detector: " << argv[1] << endl;
+  cout << "Descriptor Extractor: " << argv[2] << endl;
+
+
   last = current = time(NULL);
 
   string detector_name = argv[1],
@@ -227,7 +233,6 @@ int main (int argc, char** argv) {
     read_vocabulary(vocabulary_file, vocabulary);
     print_done();
   }
-  cout << vocabulary.type() << "/" << CV_32F << "/" << CV_32S << endl;
 
   Ptr<DescriptorMatcher>          matcher(new FlannBasedMatcher);
   Ptr<BOWImgDescriptorExtractor>  hist_extractor(
