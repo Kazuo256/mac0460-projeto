@@ -4,8 +4,11 @@ for extractor in SURF SIFT
 do
   for detector in FAST STAR SIFT SURF ORB MSER GFTT HARRIS Dense
   do
-    logname=logs/${1}-${2}${detector}-${extractor}
-    echo "nice ./$1 $2$detector $extractor > $logname.out 2> $logname.err"
+    for adapter in "" Pyramid
+    do
+      logname=logs/${1}-${adapter}${detector}-${extractor}
+      nice ./$1 $adapter$detector $extractor > $logname.out 2> $logname.err
+    done
   done 
 done
 
