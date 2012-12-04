@@ -2,7 +2,7 @@
 
 for extractor in SURF SIFT
 do
-  for detector in FAST STAR SIFT SURF ORB MSER GFTT HARRIS Dense
+  for detector in STAR SIFT SURF ORB #MSER GFTT HARRIS Dense
   do
     for adapter in "" Pyramid
     do
