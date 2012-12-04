@@ -1,0 +1,72 @@
+=== Landmark Recognition Project ===
+Classifier: BAYES
+Feature Detector: STAR
+Descriptor Extractor: SURF
+Loading training set... Done in 2 seconds.
+Detecting key points and extracting descriptors... Done in 6 seconds.
+Loading vocabulary... Done in 0 seconds.
+5/5/4
+Setting vocabulary... Done in 0 seconds.
+Extracting histograms... Done in 5 seconds.
+Loading classifier...
+Loading test set... Done in 1 seconds.
+0: 0 (should be cristo, label 0) OHYES
+1: 0 (should be cristo, label 0) OHYES
+2: 0 (should be cristo, label 0) OHYES
+3: 0 (should be cristo, label 0) OHYES
+4: 0 (should be cristo, label 0) OHYES
+5: 2 (should be cristo, label 0) MAMMAMIA
+6: 0 (should be cristo, label 0) OHYES
+7: 0 (should be cristo, label 0) OHYES
+8: 0 (should be cristo, label 0) OHYES
+9: 4 (should be cristo, label 0) MAMMAMIA
+10: 0 (should be cristo, label 0) OHYES
+11: 2 (should be muralha-da-china, label 1) MAMMAMIA
+12: 0 (should be muralha-da-china, label 1) MAMMAMIA
+13: 0 (should be muralha-da-china, label 1) MAMMAMIA
+14: 4 (should be muralha-da-china, label 1) MAMMAMIA
+15: 1 (should be muralha-da-china, label 1) OHYES
+16: 1 (should be muralha-da-china, label 1) OHYES
+17: 1 (should be muralha-da-china, label 1) OHYES
+18: 0 (should be muralha-da-china, label 1) MAMMAMIA
+19: 1 (should be muralha-da-china, label 1) OHYES
+20: 5 (should be muralha-da-china, label 1) MAMMAMIA
+21: 2 (should be panteão, label 2) OHYES
+22: 2 (should be panteão, label 2) OHYES
+23: 2 (should be panteão, label 2) OHYES
+24: 2 (should be panteão, label 2) OHYES
+25: 2 (should be panteão, label 2) OHYES
+26: 2 (should be panteão, label 2) OHYES
+27: 2 (should be panteão, label 2) OHYES
+28: 4 (should be panteão, label 2) MAMMAMIA
+29: 2 (should be piramide, label 3) MAMMAMIA
+30: 4 (should be piramide, label 3) MAMMAMIA
+31: 0 (should be piramide, label 3) MAMMAMIA
+32: 5 (should be piramide, label 3) MAMMAMIA
+33: 3 (should be piramide, label 3) OHYES
+34: 3 (should be piramide, label 3) OHYES
+35: 3 (should be piramide, label 3) OHYES
+36: 1 (should be piramide, label 3) MAMMAMIA
+37: 3 (should be piramide, label 3) OHYES
+38: 2 (should be piramide, label 3) MAMMAMIA
+39: 1 (should be taj-mahal, label 4) MAMMAMIA
+40: 4 (should be taj-mahal, label 4) OHYES
+41: 2 (should be taj-mahal, label 4) MAMMAMIA
+42: 4 (should be taj-mahal, label 4) OHYES
+43: 4 (should be taj-mahal, label 4) OHYES
+44: 4 (should be taj-mahal, label 4) OHYES
+45: 1 (should be taj-mahal, label 4) MAMMAMIA
+46: 4 (should be taj-mahal, label 4) OHYES
+47: 4 (should be taj-mahal, label 4) OHYES
+48: 5 (should be torre eiffel, label 5) OHYES
+49: 2 (should be torre eiffel, label 5) MAMMAMIA
+50: 5 (should be torre eiffel, label 5) OHYES
+51: 0 (should be torre eiffel, label 5) MAMMAMIA
+52: 5 (should be torre eiffel, label 5) OHYES
+53: 5 (should be torre eiffel, label 5) OHYES
+54: 0 (should be torre eiffel, label 5) MAMMAMIA
+55: 5 (should be torre eiffel, label 5) OHYES
+56: 5 (should be torre eiffel, label 5) OHYES
+57: 0 (should be torre eiffel, label 5) MAMMAMIA
+Correctly classified: 36 (58)
+BYEBYE
