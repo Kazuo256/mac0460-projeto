@@ -7,3 +7,5 @@ Makefile
 *.vocabulary
 /*.xml
 /*_classifier
+/vocabularies
+/classifiers
