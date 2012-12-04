@@ -214,7 +214,8 @@ int main (int argc, char** argv) {
   print_done();
 
   Mat vocabulary;
-  string vocabulary_file = detector_name+"_"+extractor_name+".vocabulary";
+  string vocabulary_file =
+    "vocabularies/"+detector_name+"_"+extractor_name+".vocabulary";
 
   if (ifstream(vocabulary_file.c_str(), ios_base::in).fail()) {
     cout << "Vocabulary not found." << endl;
@@ -256,7 +257,7 @@ int main (int argc, char** argv) {
 
   CLASSIFIER_T classifier;
   string classifier_file =
-    detector_name+"_"+extractor_name+"_"+CLASSIFIER_NAME+".xml";
+    "classifiers/"+detector_name+"_"+extractor_name+"_"+CLASSIFIER_NAME+".xml";
 
   if (ifstream(classifier_file.c_str(), ios_base::in).fail()) {
     cout << "Classifier not found." << endl;
