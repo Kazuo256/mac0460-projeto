@@ -1,0 +1,48 @@
+
+
+Decisões de projeto:
+
++ Classificadores usados:
+  + Normal Bayes
+  + K-Nearest Neighbours
+  + Decisions Tree
+  + Random Trees
+
++ Detectores e Extratores
+  + Detectores usados:
+    + STAR
+    + SURF
+    + SIFT
+    + ORB*
+  + Adaptadores:
+    + Pyramid (usamos cada detector com e sem esse adaptador)
+  + Extratores usados:
+    + SURF
+    + SIFT
+  + Motivos:
+    + Usamos os que não deram problema de execução.
+    + Os problemas de execução eram ou incompatibilidade de formatos das
+      matrizes, ou falhas de segmentação dentro do OpenCV.
+  * A combinação de detector/extrator ORB+SIFT causava falha de segmentação.
+
++ Parâmetros
+  + O único parâmetro que tivemos de escolher foi o número de clusters do
+    treinador de Bag of Words (no caso, o BOWKMeansTrainer). Originalmente
+    tentamos com 1000 clusters, mas a execução demorava mais de 2 horas.
+    Mudamos para 100 e fomos aumentando meio arbitrariamente. Quando notamos
+    que os resultados saiam melhores e mais rápidos com 256 clusters do que com
+    400, optamos por 256 clusters.
+
++ Otimizações
+  + Usamos o recurso de salvar classificadores em arquivos sempre que a
+    respectiva implementação permitia.
+  + Também salvamos em arquivos os vocabulários gerados para cada combinação
+    detector-extrator. Eles eram o maior gargalo das execuções (alguns passavam
+    de 20 minutos). Como esses arquivos podiam ser aproveitados de um
+    classificador para outro, ganhamos bastante tempo na hora de rodar as
+    baterias de testes.
+  + Graças a isso, a parte relevante das medidas de tempo se reduziram ao tempo
+    de detecção de keypoints/descritores e ao de extração de histogramas, que só
+    dependem da combinação detector/extrator e não do classificador usado.
+
+
