@@ -1,0 +1,156 @@
+\documentclass[a4paper,11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage[brazilian]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{multirow}
+
+\title{MAC0460 - 2º semestre de 2012 \\ Relatório do Projeto}
+\author{Nois}
+
+\begin{document}
+\maketitle
+
+\section{daora}
+  
+\begin{tabular}{|c|c|c|c|c|}
+    \hline
+     & Bayes & kNN & Random Trees & Decision Tree \\
+    \hline
+        STAR-SURF & 48,38\% & 77,35\% & 72,52\% & 83,57\% \\
+        SURF-SURF & 23,31\% & 46,56\% & 35,29\% & 72,52\% \\
+        SIFT-SURF & 53,77\% & 65,88\% & 53,77\% & 78,93\%\\
+        ORB-SURF & 25,38\% & 48,38\% & 46,56\% & 70,88\% \\
+        PyramidSTAR-SURF & 50,19\% & 75,75\% & 62,48\% & 77,35\% \\
+        PyramidSURF-SURF & 29,41\% & 42,87\% & 42,87\% & 80,49\% \\
+        PyramidSIFT-SURF & 42,87\% & 57,29\% & 46,56\% & 60,77\% \\
+        PyramidORB-SURF & 19,08\% & 31,39\% & 29,41\% & 65,88\% \\
+        STAR-SIFT & 21,22\% & 27,41\% & 27,41\% & 55,54\% \\
+        SURF-SIFT & 27,41\% & 27,41\% & 31,39\% & 55,54\% \\
+        SIFT-SIFT & 31,39\% & 50,19\% & 44,72\% & 67,56\% \\
+        PyramidSTAR-SIFT & 12,35\% & 14,66\% & 23,31\% & 46,56\% \\
+        PyramidSURF-SIFT & 27,41\% & 31,39\% & 27,41\% & 46,56\% \\
+        PyramidSIFT-SIFT & 12,35\% & 39,11\% & 35,29\% & 64,19\% \\
+        PyramidORB-SIFT & 23,31\% & 29,41\% & 21,29\% & 44,72\% \\
+        
+    \hline
+\end{tabular}
+
+\begin{tabular}{|c|c|c|}
+    \hline
+    Feature &  \multicolumn{2}{|c|}{Descriptor Extractor} \\
+    \cline{2-3}
+     Detectors & SURF & SIFT \\
+    \hline
+    STAR & 11,25 & 57 \\
+    SURF & 108,5 & 524,5 \\
+    SIFT  & 26 & 47,25 \\
+    ORB  & 50 & X \\
+    PyramidSTAR & 13,75 & 66,5 \\
+    PyramidSURF & 172,75 & 1396 \\
+    PyramidSIFT & 37 & 111,25 \\
+    PyramidORB & 222,5 & 1634,75 \\
+    \hline
+  \end{tabular}
+
+  \hspace{-75pt}
+  \begin{tabular}{|cc|c|c|c|c|c|c|c|}
+    \hline
+    \multicolumn{2}{|c|}{Classificador Normal Bayes} &
+    \multicolumn{6}{|c|}{Respostas do Classificador} \\
+    \cline{3-8}
+    \multicolumn{2}{|c|}{com PyramidSIFT + SIFT}
+    & Cristo & Muralha & Panteão & Pirâmides & Taj Mahal & Torre Eiffel \\
+    \hline
+    \multirow{6}{*}{Classes Reais}
+    & \multicolumn{1}{|c|}{Cristo} & 11 & 0 & 0 & 0 & 0 & 0 \\
+    \cline{2-8}
+    & \multicolumn{1}{|c|}{Muralha} & 1 & 8 & 0 & 0 & 1 & 0\\
+    \cline{2-8}
+    & \multicolumn{1}{|c|}{Panteão} & 0 & 0 & 8 & 0 & 0 & 0\\
+    \cline{2-8}
+    & \multicolumn{1}{|c|}{Pirâmides} & 0 & 1 & 0 & 8 & 1 & 0\\
+    \cline{2-8}
+    & \multicolumn{1}{|c|}{Taj Mahal} & 0 & 0 & 0 & 0 & 9 & 0\\
+    \cline{2-8}
+    & \multicolumn{1}{|c|}{Torre Eiffel} & 0 & 0 & 0 & 0 & 0 & 10\\
+    \hline
+  \end{tabular}
+  
+
+  \hspace{-75pt}
+  \begin{tabular}{|cc|c|c|c|c|c|c|c|}
+    \hline
+    \multicolumn{2}{|c|}{Classificador kNN} &
+    \multicolumn{6}{|c|}{Respostas do Classificador} \\
+    \cline{3-8}
+    \multicolumn{2}{|c|}{com PyramidSTAR + SIFT}
+    & Cristo & Muralha & Panteão & Pirâmides & Taj Mahal & Torre Eiffel \\
+    \hline
+    \multirow{6}{*}{Classes Reais}
+    & \multicolumn{1}{|c|}{Cristo} & 11 & 0 & 0 & 0 & 0 & 0 \\
+    \cline{2-8}
+    & \multicolumn{1}{|c|}{Muralha} & 2 & 8 & 0 & 0 & 0 & 0\\
+    \cline{2-8}
+    & \multicolumn{1}{|c|}{Panteão} & 0 & 0 & 8 & 0 & 0 & 0\\
+    \cline{2-8}
+    & \multicolumn{1}{|c|}{Pirâmides} & 0 & 2 & 0 & 7 & 1 & 0\\
+    \cline{2-8}
+    & \multicolumn{1}{|c|}{Taj Mahal} & 0 & 0 & 0 & 0 & 9 & 0\\
+    \cline{2-8}
+    & \multicolumn{1}{|c|}{Torre Eiffel} & 0 & 0 & 0 & 0 & 0 & 10\\
+    \hline
+  \end{tabular}
+
+
+  \hspace{-75pt}
+  \begin{tabular}{|cc|c|c|c|c|c|c|c|}
+    \hline
+    \multicolumn{2}{|c|}{Classificador Random Trees} &
+    \multicolumn{6}{|c|}{Respostas do Classificador} \\
+    \cline{3-8}
+    \multicolumn{2}{|c|}{com PyramidORB + SIFT}
+    & Cristo & Muralha & Panteão & Pirâmides & Taj Mahal & Torre Eiffel \\
+    \hline
+    \multirow{6}{*}{Classes Reais}
+    & \multicolumn{1}{|c|}{Cristo} & 10 & 1 & 0 & 0 & 0 & 0 \\
+    \cline{2-8}
+    & \multicolumn{1}{|c|}{Muralha} & 2 & 8 & 0 & 0 & 0 & 0\\
+    \cline{2-8}
+    & \multicolumn{1}{|c|}{Panteão} & 0 & 0 & 8 & 0 & 0 & 0\\
+    \cline{2-8}
+    & \multicolumn{1}{|c|}{Pirâmides} & 2 & 2 & 0 & 6 & 0 & 0\\
+    \cline{2-8}
+    & \multicolumn{1}{|c|}{Taj Mahal} & 1 & 0 & 0 & 0 & 8 & 0\\
+    \cline{2-8}
+    & \multicolumn{1}{|c|}{Torre Eiffel} & 0 & 0 & 0 & 0 & 0 & 10\\
+    \hline
+  \end{tabular}
+
+
+\hspace{-75pt}
+  \begin{tabular}{|cc|c|c|c|c|c|c|c|}
+    \hline
+    \multicolumn{2}{|c|}{Classificador Decision Tree} &
+    \multicolumn{6}{|c|}{Respostas do Classificador} \\
+    \cline{3-8}
+    \multicolumn{2}{|c|}{com PyramidORB + SIFT}
+    & Cristo & Muralha & Panteão & Pirâmides & Taj Mahal & Torre Eiffel \\
+    \hline
+    \multirow{6}{*}{Classes Reais}
+    & \multicolumn{1}{|c|}{Cristo} & 9 & 0 & 0 & 1 & 1 & 0 \\
+    \cline{2-8}
+    & \multicolumn{1}{|c|}{Muralha} & 9 & 0 & 0 & 1 & 0 & 0\\
+    \cline{2-8}
+    & \multicolumn{1}{|c|}{Panteão} & 0 & 0 & 8 & 0 & 0 & 0\\
+    \cline{2-8}
+    & \multicolumn{1}{|c|}{Pirâmides} & 3 & 0 & 0 & 6 & 1 & 0\\
+    \cline{2-8}
+    & \multicolumn{1}{|c|}{Taj Mahal} & 3 & 0 & 0 & 0 & 6 & 0\\
+    \cline{2-8}
+    & \multicolumn{1}{|c|}{Torre Eiffel} & 1 & 0 & 0 & 0 & 0 & 9\\
+    \hline
+  \end{tabular}
+
+
+\end{document}
