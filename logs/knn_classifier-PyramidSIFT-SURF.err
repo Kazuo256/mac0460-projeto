@@ -1,0 +1,1 @@
+OpenCV Error: The function/feature is not implemented () in CvStatModel::write, file /tmp/opencv/OpenCV-2.4.3/modules/ml/src/inner_functions.cpp, line 114
