@@ -1,0 +1,30 @@
+bayes_classifier-ORB-SURF.out:Detecting extracting 25
+bayes_classifier-ORB-SURF.out:Extracting 25
+bayes_classifier-PyramidORB-SIFT.out:Detecting extracting 812
+bayes_classifier-PyramidORB-SIFT.out:Extracting 817
+bayes_classifier-PyramidORB-SURF.out:Detecting extracting 110
+bayes_classifier-PyramidORB-SURF.out:Extracting 112
+bayes_classifier-PyramidSIFT-SIFT.out:Detecting extracting 49
+bayes_classifier-PyramidSIFT-SIFT.out:Extracting 50
+bayes_classifier-PyramidSIFT-SURF.out:Detecting extracting 18
+bayes_classifier-PyramidSIFT-SURF.out:Extracting 19
+bayes_classifier-PyramidSTAR-SIFT.out:Detecting extracting 33
+bayes_classifier-PyramidSTAR-SIFT.out:Extracting 37
+bayes_classifier-PyramidSTAR-SURF.out:Detecting extracting 6
+bayes_classifier-PyramidSTAR-SURF.out:Extracting 7
+bayes_classifier-PyramidSURF-SIFT.out:Detecting extracting 693
+bayes_classifier-PyramidSURF-SIFT.out:Extracting 697
+bayes_classifier-PyramidSURF-SURF.out:Detecting extracting 82
+bayes_classifier-PyramidSURF-SURF.out:Extracting 86
+bayes_classifier-SIFT-SIFT.out:Detecting extracting 38
+bayes_classifier-SIFT-SIFT.out:Extracting 28
+bayes_classifier-SIFT-SURF.out:Detecting extracting 12
+bayes_classifier-SIFT-SURF.out:Extracting 14
+bayes_classifier-STAR-SIFT.out:Detecting extracting 29
+bayes_classifier-STAR-SIFT.out:Extracting 28
+bayes_classifier-STAR-SURF.out:Detecting extracting 6
+bayes_classifier-STAR-SURF.out:Extracting 5
+bayes_classifier-SURF-SIFT.out:Detecting extracting 261
+bayes_classifier-SURF-SIFT.out:Extracting 263
+bayes_classifier-SURF-SURF.out:Detecting extracting 53
+bayes_classifier-SURF-SURF.out:Extracting 56

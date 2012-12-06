@@ -1,0 +1,30 @@
+knn_classifier-ORB-SURF.out:Detecting extracting 25
+knn_classifier-ORB-SURF.out:Extracting 26
+knn_classifier-PyramidORB-SIFT.out:Detecting extracting 812
+knn_classifier-PyramidORB-SIFT.out:Extracting 817
+knn_classifier-PyramidORB-SURF.out:Detecting extracting 110
+knn_classifier-PyramidORB-SURF.out:Extracting 112
+knn_classifier-PyramidSIFT-SIFT.out:Detecting extracting 53
+knn_classifier-PyramidSIFT-SIFT.out:Extracting 94
+knn_classifier-PyramidSIFT-SURF.out:Detecting extracting 18
+knn_classifier-PyramidSIFT-SURF.out:Extracting 19
+knn_classifier-PyramidSTAR-SIFT.out:Detecting extracting 33
+knn_classifier-PyramidSTAR-SIFT.out:Extracting 32
+knn_classifier-PyramidSTAR-SURF.out:Detecting extracting 7
+knn_classifier-PyramidSTAR-SURF.out:Extracting 7
+knn_classifier-PyramidSURF-SIFT.out:Detecting extracting 693
+knn_classifier-PyramidSURF-SIFT.out:Extracting 698
+knn_classifier-PyramidSURF-SURF.out:Detecting extracting 99
+knn_classifier-PyramidSURF-SURF.out:Extracting 86
+knn_classifier-SIFT-SIFT.out:Detecting extracting 20
+knn_classifier-SIFT-SIFT.out:Extracting 21
+knn_classifier-SIFT-SURF.out:Detecting extracting 13
+knn_classifier-SIFT-SURF.out:Extracting 14
+knn_classifier-STAR-SIFT.out:Detecting extracting 28
+knn_classifier-STAR-SIFT.out:Extracting 29
+knn_classifier-STAR-SURF.out:Detecting extracting 5
+knn_classifier-STAR-SURF.out:Extracting 6
+knn_classifier-SURF-SIFT.out:Detecting extracting 261
+knn_classifier-SURF-SIFT.out:Extracting 263
+knn_classifier-SURF-SURF.out:Detecting extracting 53
+knn_classifier-SURF-SURF.out:Extracting 56
