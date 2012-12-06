@@ -140,7 +140,8 @@ static void read_vocabulary (const string& filename, Mat& vocabulary) {
 }
 
 template <typename T>
-static void train (const Mat& vocabulary, T& classifier, const string& file) {
+static void trainclassifier (const Mat& vocabulary, T& classifier,
+                             const string& file) {
   Mat samples, samples_32f,
       labels;
 
@@ -156,7 +157,11 @@ static void train (const Mat& vocabulary, T& classifier, const string& file) {
 
   cout << "Training classifier...";
   cout.flush();
+#ifdef CUSTOM_TRAINER
+  train(classifier, samples_32f, labels);
+#else
   classifier.train(samples_32f, labels);
+#endif
   print_done();
 
   try {
@@ -261,7 +266,7 @@ int main (int argc, char** argv) {
 
   if (ifstream(classifier_file.c_str(), ios_base::in).fail()) {
     cout << "Classifier not found." << endl;
-    train(vocabulary, classifier, classifier_file);
+    trainclassifier(vocabulary, classifier, classifier_file);
   }
   else {
     cout << "Loading classifier...";

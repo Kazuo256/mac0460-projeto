@@ -28,3 +28,19 @@ set_target_properties (
   COMPILE_FLAGS "-DCLASSIFIER=knn"
 )
 
+add_executable ( dtree_classifier src/main.cxx )
+target_link_libraries ( dtree_classifier ${OpenCV_LIBS} )
+set_target_properties (
+  dtree_classifier
+  PROPERTIES
+  COMPILE_FLAGS "-DCLASSIFIER=dtree"
+)
+
+add_executable ( rtrees_classifier src/main.cxx )
+target_link_libraries ( rtrees_classifier ${OpenCV_LIBS} )
+set_target_properties (
+  rtrees_classifier
+  PROPERTIES
+  COMPILE_FLAGS "-DCLASSIFIER=rtrees"
+)
+
