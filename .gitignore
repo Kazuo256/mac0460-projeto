@@ -9,3 +9,6 @@ Makefile
 /*_classifier
 /vocabularies
 /classifiers
+*.aux
+*.log
+novo-1.pdf
