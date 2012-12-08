@@ -4,6 +4,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage{lmodern}
 \usepackage{multirow}
+\usepackage{hyperref}
 
 \title{MAC0460 - 2º semestre de 2012 \\ Relatório do Projeto}
 \author{
@@ -64,11 +65,79 @@
     \item \verb$runTest.sh$, \verb$runTestBattery.sh$ e \verb$runTests.sh$:
       Scripts para execução automátizada em diferentes níveis do treinador. O
       modo de usá-los é explicado na seção 2.
+    \item \verb$training.set$ e \verb$test.set$:
+      Arquivos que listam as imagens de treinamento e de teste, respectivamente.
+      Fizemos ele para podermos "iterar" pelas imagens.
   \end{itemize}
 
 \section{Compilando e rodando o projeto}
 
   Para compilar...
+
+  \subsection{Execução do treinador}
+
+    Antes de mais nada, é precisa extrair as imagens de treinamento e de teste
+    nas pastas \verb$training_set$ e \verb$test_set$, respectivamente, tomando o
+    cuidado de renomear a pasta \verb$test_Set/piramides$ para
+    \verb$test_set/piramide$ (como está no conjunto de treinamento), pois o
+    treinador usa os nomes dessas pastas para identificar as classes. O
+    importante é que os caminhos fiquem extamente como estão nos arquivos
+    \verb$training.set$ e \verb$test.set$.
+
+    Para rodar o programa, recomendamos o uso dos scripts bash que entregamos
+    junto com o projeto. Segue a explicação de cada um deles:
+
+    \begin{itemize}
+      \item \verb| ./runTest.sh <classificador> <detector> <extrator> |
+
+      Onde:
+      \begin{itemize}
+        \item[<classificador>]
+          Deve ser "\verb$bayes_classifier$", "\verb$knn_classifier$", \\
+          "\verb$dtree_classifier$" ou "\verb$rtrees_classifier$". Sem as aspas.
+        \item[<detector>]
+          Deve ser um dos especificados \href{
+          http://docs.opencv.org/modules/features2d/doc/common_interfaces_of_feature_detectors.html#featuredetector-create
+          }{nesse link}. Incluindo o uso dos adaptadores.
+        \item[<extrator>]
+          Deve ser um dos especificados \href{
+          http://docs.opencv.org/modules/features2d/doc/common_interfaces_of_descriptor_extractors.html#descriptorextractor-create
+          }{nesse link}.
+      \end{itemize}
+      Esse script roda o treinador para o classificador especificado, com a
+      combinação de detector (com ou sem adaptador) e extrator especificada.
+
+      Como será visto na seção 3, nem todas as combinações de detectores,
+      adaptadores e extratores com classificadores funcionam. Para saber quais
+      devem funcionar, é só ver na seção 3.
+
+      \item \verb| ./runTestBattery.sh <classificador>|
+
+      Onde:
+      \begin{itemize}
+        \item[<classificador>]
+          Deve ser "\verb$bayes_classifier$", "\verb$knn_classifier$", \\
+          "\verb$dtree_classifier$" ou "\verb$rtrees_classifier$". Sem as aspas.
+      \end{itemize}
+      Esse script roda uma bateria de testes completa para o classificador
+      passado, usando todas as combinações de detectores (com e sem adaptador)
+      e extratores que sabemos que funcionam (mencionados na seção 3). Na
+      verdade, haverá um dos testes que resultará em falha de segmentação (por
+      culpa do OpenCV), a combinação ORB-SIFT, como será explicado na seção 3.
+
+
+      \item \verb| ./runTests.sh|
+
+      Esse script roda todos os testes que usamos no projeto, combinando todos
+      os classificadores escolhidos com os possíveis detectores, adaptadores e
+      extratores. A bateria de testes de cada classificador é executada em um
+      processo paralelo, portanto executar esse script consome bastantes
+      recursos da máquina (embora seja bem simples alterá-lo para que tudo seja
+      sequencial).
+
+      Devido ao mesmo motivo do script anterior, haverá quatro testes que
+      resultarão em falha de segmentação.
+    \end{itemize}
 
 \section{Decisões de projeto}
 
