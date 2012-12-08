@@ -8,7 +8,7 @@ if [ ! -d $outdir ]; then
   mkdir $outdir/training_set
 fi
 
-contents="src/ CMakeLists.txt logs relatorio.pdf runTest*.sh"
+contents="src/ CMakeLists.txt logs relatorio.pdf runTest*.sh *.set"
 cp -r $contents $outdir
 
 tar -caf $outdir.tar.gz $outdir

@@ -13,3 +13,4 @@ Makefile
 *.log
 relatorio.pdf
 projeto-*.tar.gz
+*.out
