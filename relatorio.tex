@@ -80,13 +80,13 @@
     \end{center}
     O diretório do OpenCV é ou a pasta do resultado de compilação do OpenCV, que
     será muito provavelmente a pasta build, que conterá o arquivo OpenCVConfig.cmake,
-    ou a pasta onde fica o pacote instalado do OpenCV, que muito provavelmente sera a 
-    pasta \verb$/usr/share/opencv$. Testamos porém apenas com OpenCV compilado, então
+    ou a pasta onde fica o pacote instalado do OpenCV, que é a pasta
+    \verb$/usr/local$. Testamos porém apenas com o OpenCV compilado, então
     não podemos garantir que o segundo método funcione. \\*
     Além disso, foi testado o projeto com Windows usando Visual Studio, usando o CMake
     para gerar um arquivo de Projeto do Visual Studio. Para rodar os executáveis, porém,
     é necessário adicionar os arquivos DLL ao Path do windows. Esses arquivos são
-    encontrados em \verb$C:/OpenCV/opencv/bin$,
+    encontrados em \verb$/opencv/bin$,
     com as subpastas Release e Debug, dependendo de em qual configuração de solução
     do Visual Studio o OpenCV foi compilado.\\*
     Essas instruções irão gerar um arquivo de Makefile que poderá ser rodade usando
