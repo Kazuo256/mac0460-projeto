@@ -20,8 +20,9 @@
 
 \section{Organização do Projeto}
 
-  Dentro do arquivo compactado que enviamos deve haver uma pasta com os
-  seguintes arquivos e diretórios:
+  Dentro do arquivo compactado que enviamos deve haver uma pasta (a qual nos
+  referiremos como sendo a pasta raiz do projeto) com os seguintes arquivos e
+  diretórios:
 
   \begin{itemize}
     \item \verb$relatorio.pdf$:
@@ -63,7 +64,7 @@
           A saída resultante da exucução do script \verb$confusion.sh$.
       \end{itemize}
     \item \verb$runTest.sh$, \verb$runTestBattery.sh$ e \verb$runTests.sh$:
-      Scripts para execução automátizada em diferentes níveis do treinador. O
+      Scripts para execução automatizada em diferentes níveis do treinador. O
       modo de usá-los é explicado na seção 2.
     \item \verb$training.set$ e \verb$test.set$:
       Arquivos que listam as imagens de treinamento e de teste, respectivamente.
@@ -74,30 +75,44 @@
 
   \subsection{Compilação do projeto}
 
-    Para compilar em GNU/Linux, basta usar o comando:
+    Usamos \href{http://cmake.org/}{CMake} (assim como o próprio OpenCV) para
+    compilar nosso projeto. É preciso rodá-lo antes de poder compilar o programa
+    em si. Em GNU/Linux, isso é feito com o comando:
+
     \begin{center}
-      \verb1$cmake -DOpenCV_DIR=<diretorio_do_opencv> .1
+      \verb1$ cmake -DOpenCV_DIR=<diretorio_do_opencv> .1
     \end{center}
-    O diretório do OpenCV é ou a pasta do resultado de compilação do OpenCV, que
-    será muito provavelmente a pasta build, que conterá o arquivo OpenCVConfig.cmake,
-    ou a pasta onde fica o pacote instalado do OpenCV, que é a pasta
-    \verb$/usr/local$. Testamos porém apenas com o OpenCV compilado, então
-    não podemos garantir que o segundo método funcione. \\*
-    Além disso, foi testado o projeto com Windows usando Visual Studio, usando o CMake
-    para gerar um arquivo de Projeto do Visual Studio. Para rodar os executáveis, porém,
-    é necessário adicionar os arquivos DLL ao Path do windows. Esses arquivos são
-    encontrados em \verb$/opencv/bin$,
-    com as subpastas Release e Debug, dependendo de em qual configuração de solução
-    do Visual Studio o OpenCV foi compilado.\\*
-    Essas instruções irão gerar um arquivo de Makefile que poderá ser rodade usando
-    \verb1$make1. Após isso, serão gerados quatro executáveis, um para cada classificador:
-    bayes\_classifier, knn\_classifier, dtree\_classifier e rtrees\_classifier.
+
+    Onde <diretorio\_do\_opencv> é ou a pasta na qual o OpenCV foi compilado, em
+    geral nomeada como \verb$build$ e que deve conter o arquivo
+    \verb$OpenCVConfig.cmake$; ou a pasta onde fica o pacote instalado do
+    OpenCV, que por padrão fica em \verb$/usr/local$. Porém testamos apenas com
+    o OpenCV compilado (última versão estável), então não podemos garantir que o
+    segundo método funcione.
+
+    Além disso, foi testado o projeto com Windows usando Visual Studio, usando o
+    CMake para gerar um arquivo de Projeto do Visual Studio. Para rodar os
+    executáveis, é necessário adicionar os arquivos DLL ao Path do windows.
+    Esses arquivos são encontrados em \verb$/opencv/bin$, com as subpastas
+    \verb$Release$ e \verb$Debug$, dependendo de com qual configuração de
+    solução do Visual Studio o OpenCV foi compilado.
+
+    Em GNU/Linux, essas instruções irão gerar um arquivo de Makefile que poderá
+    ser rodado usando o comando
+
+    \begin{center}
+      \verb1$ make1
+    \end{center}
+
+    A partir da pasta raiz do nosso projeto. Com isso, serão gerados quatro
+    executáveis, um para cada classificador: \verb$bayes_classifier$,
+    \verb$knn_classifier$, \verb$dtree_classifier$ e \verb$rtrees_classifier$.
 
   \subsection{Execução do treinador}
 
     Antes de mais nada, é preciso extrair as imagens de treinamento e de teste
     nas pastas \verb$training_set$ e \verb$test_set$, respectivamente, tomando o
-    cuidado de renomear a pasta \verb$test_Set/piramides$ para
+    cuidado de renomear a pasta \verb$test_set/piramides$ para
     \verb$test_set/piramide$ (como está no conjunto de treinamento), pois o
     treinador usa os nomes dessas pastas para identificar as classes. O
     importante é que os caminhos fiquem extamente como estão nos arquivos
@@ -115,11 +130,11 @@
           Deve ser "\verb$bayes_classifier$", "\verb$knn_classifier$", \\
           "\verb$dtree_classifier$" ou "\verb$rtrees_classifier$". Sem as aspas.
         \item[<detector>]
-          Deve ser um dos especificados \href{
+          Deve ser um dos detectores especificados \href{
           http://docs.opencv.org/modules/features2d/doc/common_interfaces_of_feature_detectors.html#featuredetector-create
-          }{nesse link}. Incluindo o uso dos adaptadores.
+          }{nesse link}. O uso dos adaptadores também é válido.
         \item[<extrator>]
-          Deve ser um dos especificados \href{
+          Deve ser um dos extratores especificados \href{
           http://docs.opencv.org/modules/features2d/doc/common_interfaces_of_descriptor_extractors.html#descriptorextractor-create
           }{nesse link}.
       \end{itemize}
@@ -155,15 +170,16 @@
       sequencial).
 
       Devido ao mesmo motivo do script anterior, haverá quatro testes que
-      resultarão em falha de segmentação.
+      resultarão em falha de segmentação - um para cada classificador.
     \end{itemize}
 
 \section{Decisões de projeto}
 
   Usamos os Detectores e Extratores que não apresentaram problema de execução,
   como incompatibilidade de formatos das matrizes, ou falhas de segmentação
-  dentro da própria biblioteca do OpenCV. Os classificadores escolhemos mais
-  por preferência, mas também acabamos descartando alguns pelos mesmo motivos.  
+  dentro da própria biblioteca do OpenCV, embora uma certa combinação específica
+  não funcione. Os classificadores foram escolhidos mais por preferência, mas
+  também acabamos descartando alguns pelos mesmo motivos.  
 
   Isso nos deixou com as seguintes possibilidades:
 
@@ -203,7 +219,7 @@
   
   \footnotetext{
     A combinação específica de detector/extrator ORB+SIFT causava falha de
-    segmentação.
+    segmentação. A PyramidORB+SIFT não teve problemas.
   }
 
 \section{Escolha de Parâmetros}
@@ -278,9 +294,9 @@
   exceto contra o Classificador Random Trees usando a combinação
   \textit{PyramidORB-SIFT}.
 
-  Abaixo segue uma tabela do tempo total tomado para detecção de KeyPoints,
-  extração de descritores e extração de histogramas. O tempo para criar o
-  vocabulário e treino do classificador é ignorado aqui pois, como já
+  Abaixo segue uma tabela do tempo total, em segundos, tomado para detecção de
+  KeyPoints, extração de descritores e extração de histogramas. O tempo para
+  criar o vocabulário e treino do classificador é ignorado aqui pois, como já
   mencionado, ambos o classificador e o vocabulário podem ser salvos em arquivos
   para uso posterior.
 
@@ -410,7 +426,7 @@
 
   Uma observação que podemos fazer aqui é que, enquanto os classificadores
   Bayesiano, K-Nearest Neighbors e Random Trees obtiveram matrizes de confusão
-  boas (o Bayesiano ainda sobressaindo-se), o de Decision Tree teve uma
+  boas (o Bayesiano ainda se sobressaindo), o de Decision Tree teve uma
   particularmente pior. Ele errou todas as classificações de imagens da Muralha
   da China. Provavelmente essa combinação específica de detector/extrator só foi
   a melhor dele por acaso, e mesmo assim, como é possível observar na primeira
