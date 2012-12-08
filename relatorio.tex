@@ -118,11 +118,12 @@
     importante é que os caminhos fiquem extamente como estão nos arquivos
     \verb$training.set$ e \verb$test.set$.
 
-    Para rodar o programa, recomendamos o uso dos scripts bash que entregamos
-    junto com o projeto. Segue a explicação de cada um deles:
+    É possível rodar o treinador para uma combinação específica de
+    classificador, detector e extrator, e também é possível rodar baterias
+    completas de testes. Segue uma explicação de cada uma dessas possibilidads:
 
     \begin{itemize}
-      \item \verb| ./runTest.sh <classificador> <detector> <extrator> |
+      \item \verb| ./<classificador> <detector> <extrator> |
 
       Onde:
       \begin{itemize}
@@ -138,8 +139,10 @@
           http://docs.opencv.org/modules/features2d/doc/common_interfaces_of_descriptor_extractors.html#descriptorextractor-create
           }{nesse link}.
       \end{itemize}
-      Esse script roda o treinador para o classificador especificado, com a
-      combinação de detector (com ou sem adaptador) e extrator especificada.
+      Executa o treinador usando o classificador especificado, com a combinação
+      de detector (com ou sem adaptador) e extrator especificada. Os resultados
+      e detalhes das diversas etapas do processo de aprendizagem são impressas
+      na saída padrão.
 
       Como será visto na seção 3, nem todas as combinações de detectores,
       adaptadores e extratores com classificadores funcionam. Para saber quais
@@ -159,6 +162,7 @@
       verdade, haverá um dos testes que resultará em falha de segmentação (por
       culpa do OpenCV), a combinação ORB-SIFT, como será explicado na seção 3.
 
+      A saída é direcionada para os respectivos arquivos na pasta \verb$logs$.
 
       \item \verb| ./runTests.sh|
 
@@ -171,6 +175,9 @@
 
       Devido ao mesmo motivo do script anterior, haverá quatro testes que
       resultarão em falha de segmentação - um para cada classificador.
+
+      A saída também é direcionada para os respectivos arquivos na pasta
+      \verb$logs$.
     \end{itemize}
 
 \section{Decisões de projeto}
@@ -200,7 +207,12 @@
             \item SURF
             \item SIFT
             \item ORB\footnotemark
+              \footnotetext{
+                A combinação específica de detector/extrator ORB+SIFT causava
+                falha de segmentação. A PyramidORB+SIFT não teve problemas.
+              }
           \end{itemize}
+
   
         \item Adaptadores:
           \begin{itemize} 
@@ -217,11 +229,6 @@
   
   \end{itemize}
   
-  \footnotetext{
-    A combinação específica de detector/extrator ORB+SIFT causava falha de
-    segmentação. A PyramidORB+SIFT não teve problemas.
-  }
-
 \section{Escolha de Parâmetros}
 
   O único parâmetro que necessita escolha é o número de clusters do treinador de
@@ -263,7 +270,7 @@
   e o erro mínimo, consideramos apenas o erro máximo, que então é tido com 95\%
   de confiança.
 
-  \vspace{15pt}
+  \vspace{10pt}
   \hspace{-25pt}
   \begin{tabular}{|c|c|c|c|c|}
     \hline
@@ -300,7 +307,7 @@
   mencionado, ambos o classificador e o vocabulário podem ser salvos em arquivos
   para uso posterior.
 
-  \vspace{15pt}
+  \vspace{10pt}
   \hspace{65pt}
   \begin{tabular}{|c|c|c|}
     \hline
@@ -318,12 +325,12 @@
     PyramidORB & 222,5 & 1634,75 \\
     \hline
   \end{tabular}
-  \vspace{15pt}
+  \vspace{10pt}
 
   Abaixo seguem as matrizes de confusão de cada um dos melhores resultados de
-  combinação detector/extrator para cada um dos classificadores usados.
+  combinação detector/extrator para cada um dos classificadores usados:
 
-  \vspace{15pt}
+  \vspace{10pt}
   \hspace{-75pt}
   \begin{tabular}{|cc|c|c|c|c|c|c|c|}
     \hline
@@ -422,7 +429,7 @@
     & \multicolumn{1}{|c|}{Torre Eiffel} & 1 & 0 & 0 & 0 & 0 & 9\\
     \hline
   \end{tabular}
-  \vspace{15pt}
+  \vspace{10pt}
 
   Uma observação que podemos fazer aqui é que, enquanto os classificadores
   Bayesiano, K-Nearest Neighbors e Random Trees obtiveram matrizes de confusão
