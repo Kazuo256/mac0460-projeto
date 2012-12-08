@@ -12,3 +12,4 @@ Makefile
 *.aux
 *.log
 relatorio.pdf
+projeto-*.tar.gz

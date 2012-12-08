@@ -17,6 +17,59 @@
 \begin{document}
 \maketitle
 
+\section{Organização do Projeto}
+
+  Dentro do arquivo compactado que enviamos deve haver uma pasta com os
+  seguintes arquivos e diretórios:
+
+  \begin{itemize}
+    \item \verb$relatorio.pdf$:
+      Esse relatório.
+    \item \verb$src/$:
+      Pasta com o código fonte do treinador.
+    \item \verb$CMakeLists.txt$:
+      Arquivo de CMake necessário para compilar o treinador.
+    \item \verb$logs/$:
+      Pasta com os logs de saída do treinador para os diferentes
+      classificadores. Dentro dela haverá arquivos dos tipos:
+      \begin{itemize}
+        \item \verb$*.out$:
+          Saídas da execução do treinador para um classificador específico com
+          uma combinação específica de detector/extrator. Nesses arquivos é
+          possível encontrar todos os dados relevantes da execução, como tempo
+          de execução de cada etapa e o resultado da classificação de cada
+          imagem.
+        \item \verb$*.err$:
+          Saídas de erro da execução do treinador para um classificador
+          específico com uma combinação específica de detector/extrator. São
+          poucos os logs de erro que contêm algum texto, e estes são apenas
+          alertas de que não foi possível salvar o classificador em um arquivo
+          (ver seção 5 para mais informações).
+        \item \verb$*.test$:
+          Arquivo com uma filtragem dos arquivos \verb$*.out$ de todas as
+          combinações detector/extrator de um mesmo classificador, contendo
+          apenas o desempenho (acertos/total) dele.
+        \item \verb$*.times$:
+          Arquivo com uma filtragem dos arquivos \verb$*.out$ de todas as
+          combinações detector/extrator de um mesmo classificador, contendo
+          apenas o tempo de execução das etapas de detecção/extração de
+          descritores e histogramas dele (ver seção 5 para mais informações).
+        \item \verb$confusion.awk$ e \verb$confusion.sh$:
+          Um par de scripts que juntos analisam os logs e geram uma saída com as
+          matrizes de confusão das melhores combinações detector/extrator de
+          cada um dos classificadores (ver seção 6 para mais detalhes).
+        \item \verb$confusion.coelho$:
+          A saída resultante da exucução do script \verb$confusion.sh$.
+      \end{itemize}
+    \item \verb$runTest.sh$, \verb$runTestBattery.sh$ e \verb$runTests.sh$:
+      Scripts para execução automátizada em diferentes níveis do treinador. O
+      modo de usá-los é explicado na seção 2.
+  \end{itemize}
+
+\section{Compilando e rodando o projeto}
+
+  Para compilar...
+
 \section{Decisões de projeto}
 
   Usamos os Detectores e Extratores que não apresentaram problema de execução,
@@ -78,7 +131,8 @@
 
   Usamos o recurso de salvar classificadores em arquivos sempre que a respectiva
   implementação permitia, para evitar que eles fossem treinados a cada vez que
-  rodássemos o programa.
+  rodássemos o programa. O único classificador que não tem essa funcionalidade
+  implementada é o K-Nearest Neighbors.
 
   Também salvamos em arquivos os vocabulários gerados para cada combinação
   detector/extrator. Eles eram o maior gargalo das execuções (alguns passavam de
@@ -89,7 +143,7 @@
   tempo de detecção de KeyPoints/descritores e ao de extração de histogramas,
   que só dependem da combinação detector/extrator e não do classificador usado.
 
-\section{Resultados obtidos}
+\section{Resultados obtidos e conclusões}
 
   Abaixo segue uma tabela contendo o erro máximo de um classificador dado os
   resultados dos testes. Esse erro é calculado a partir da fórmula:
@@ -105,6 +159,7 @@
   e o erro mínimo, consideramos apenas o erro máximo, que então é tido com 95\%
   de confiança.
 
+  \vspace{15pt}
   \hspace{-25pt}
   \begin{tabular}{|c|c|c|c|c|}
     \hline
@@ -141,7 +196,7 @@
   mencionado, ambos o classificador e o vocabulário podem ser salvos em arquivos
   para uso posterior.
 
-  \vspace{20pt}
+  \vspace{15pt}
   \hspace{65pt}
   \begin{tabular}{|c|c|c|}
     \hline
@@ -159,12 +214,12 @@
     PyramidORB & 222,5 & 1634,75 \\
     \hline
   \end{tabular}
-  \bigskip
-  \vspace{10pt}
+  \vspace{15pt}
 
   Abaixo seguem as matrizes de confusão de cada um dos melhores resultados de
   combinação detector/extrator para cada um dos classificadores usados.
 
+  \vspace{15pt}
   \hspace{-75pt}
   \begin{tabular}{|cc|c|c|c|c|c|c|c|}
     \hline
@@ -263,7 +318,7 @@
     & \multicolumn{1}{|c|}{Torre Eiffel} & 1 & 0 & 0 & 0 & 0 & 9\\
     \hline
   \end{tabular}
-  \vspace{20pt}
+  \vspace{15pt}
 
   Uma observação que podemos fazer aqui é que, enquanto os classificadores
   Bayesiano, K-Nearest Neighbors e Random Trees obtiveram matrizes de confusão
