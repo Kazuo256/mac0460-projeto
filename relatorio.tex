@@ -19,62 +19,94 @@
 
 \section{Decisões de projeto}
 
-\begin{itemize}
-  \item Classificadores usados:
+  Usamos os Detectores e Extratores que não apresentaram problema de execução,
+  como incompatibilidade de formatos das matrizes, ou falhas de segmentação
+  dentro da própria biblioteca do OpenCV. Os classificadores escolhemos mais
+  por preferência, mas também acabamos descartando alguns pelos mesmo motivos.  
+
+  Isso nos deixou com as seguintes possibilidades:
+
   \begin{itemize}
-    \item[-] Normal Bayes
-    \item[-] K-Nearest Neighbours
-    \item[-] Decisions Tree
-    \item[-] Random Trees
+    \item Classificadores:
+    \begin{itemize}
+      \item[-] Normal Bayes
+      \item[-] K-Nearest Neighbours
+      \item[-] Decisions Tree
+      \item[-] Random Trees
+    \end{itemize}
+    
+    \item Detectores e Extratores
+      \begin{itemize}
+        \item Detectores usados:
+          \begin{itemize}
+            \item STAR
+            \item SURF
+            \item SIFT
+            \item ORB\footnotemark
+          \end{itemize}
+  
+        \item Adaptadores:
+          \begin{itemize} 
+            \item Pyramid (usamos cada detector com e sem esse adaptador)
+          \end{itemize}
+  
+        \item Extratores usados:
+          \begin{itemize} 
+            \item SURF
+            \item SIFT
+          \end{itemize}
+  
+      \end{itemize}
+  
   \end{itemize}
   
-  \item Detectores e Extratores
-    \begin{itemize}
-      \item Detectores usados:
-        \begin{itemize}
-          \item STAR
-          \item SURF
-          \item SIFT
-          \item ORB*
-        \end{itemize}
-
-      \item Adaptadores:
-        \begin{itemize} 
-          \item Pyramid (usamos cada detector com e sem esse adaptador)
-        \end{itemize}
-
-      \item Extratores usados:
-        \begin{itemize} 
-          \item SURF
-          \item SIFT
-        \end{itemize}
-
-    \end{itemize}
-
-\end{itemize}
-
-Motivos de uso:
-\begin{itemize}
-  \item Usamos os Classificadores, Detectores e Extratores que não apresentaram problema de execução.
-  \item Os problemas de execução eram ou incompatibilidade de formatos das matrizes, ou falhas de segmentação dentro do OpenCV.
-\end{itemize}
-
-* A combinação de detector/extrator ORB+SIFT causava falha de segmentação.
+  \footnotetext{
+    A combinação específica de detector/extrator ORB+SIFT causava falha de
+    segmentação.
+  }
 
 \section{Escolha de Parâmetros}
-O único parâmetro que necessita escolha é o número de clusters do treinador de Bag of Words (no caso, o BOWKMeansTrainer). Originalmente tentamos com 1000 clusters, mas a execução demorava mais de 2 horas. Mudamos para 100 e fomos aumentando meio arbitrariamente. Quando notamos que os resultados saiam melhores e mais rápidos com 256 clusters do que com 400, optamos por 256 clusters.
+
+  O único parâmetro que necessita escolha é o número de clusters do treinador de
+  Bag of Words (no caso, o \verb$BOWKMeansTrainer$). Originalmente tentamos com
+  1000 clusters, mas a execução demorava mais de 2 horas. Mudamos para 100 e
+  fomos aumentando meio arbitrariamente. Quando notamos que os resultados saiam
+  melhores e mais rápidos com 256 clusters do que com 400, optamos por 256
+  clusters.
 
 \section{Otimizações utilizadas}
-Usamos o recurso de salvar classificadores em arquivos sempre que a respectiva implementação permitia.\\*
-Também salvamos em arquivos os vocabulários gerados para cada combinação detector/extrator. Eles eram o maior gargalo das execuções (alguns passavam de 20 minutos). Como esses arquivos podiam ser aproveitados de um classificador para outro, ganhamos bastante tempo na hora de rodar as baterias de testes.\\*
-Graças a isso, a parte relevante das medidas de tempo se reduziram ao tempo de detecção de KeyPoints/descritores e ao de extração de histogramas, que só dependem da combinação detector/extrator e não do classificador usado.
+
+  Usamos o recurso de salvar classificadores em arquivos sempre que a respectiva
+  implementação permitia, para evitar que eles fossem treinados a cada vez que
+  rodássemos o programa.
+
+  Também salvamos em arquivos os vocabulários gerados para cada combinação
+  detector/extrator. Eles eram o maior gargalo das execuções (alguns passavam de
+  20 minutos). Como esses arquivos podiam ser aproveitados de um classificador
+  para outro, ganhamos bastante tempo na hora de rodar as baterias de testes.
+
+  Graças a isso, a parte temporalmente relevante das computações reduziram-se ao
+  tempo de detecção de KeyPoints/descritores e ao de extração de histogramas,
+  que só dependem da combinação detector/extrator e não do classificador usado.
 
 \section{Resultados obtidos}
 
-Abaixo segue uma tabela contendo o erro máximo de um classificador dado os resultados dos testes. Esse erro é calculado a partir da fórmula:\\* $ Erro_T(g)+Z_n * \sqrt{\frac{Erro_T(g)(1 - Erro_T(g))}{n}} $\\*
-Onde n é o número de amostras de teste, $Erro_T$ é a porcentagem de erro do classificador e $Z_n$ é uma constante indicando o intervalo de confiança. Neste caso usamos 90\% de intervalo de confiança (e consequentemente um $Z_n$ de 1.64), mas como tal intervalo denota o intervalo entre o erro máximo e o erro mínimo, consideramos apenas o erro máximo, que então é tido com 95\% de confiança.\\*
+  Abaixo segue uma tabela contendo o erro máximo de um classificador dado os
+  resultados dos testes. Esse erro é calculado a partir da fórmula:
 
-\begin{tabular}{|c|c|c|c|c|}
+  \begin{center}
+    $ Erro_T(g)+Z_n * \sqrt{\frac{Erro_T(g)(1 - Erro_T(g))}{n}} $
+  \end{center}
+
+  Onde $n$ é o número de amostras de teste, $Erro_T$ é a porcentagem de erro do
+  classificador e $Z_n$ é uma constante indicando o intervalo de confiança.
+  Neste caso usamos um intervalo de confiança de 90\% (e consequentemente um
+  $Z_n$ de 1.64), mas como tal intervalo denota o intervalo entre o erro máximo
+  e o erro mínimo, consideramos apenas o erro máximo, que então é tido com 95\%
+  de confiança.
+
+  \hspace{-25pt}
+  \begin{tabular}{|c|c|c|c|c|}
     \hline
      & Bayes & kNN & Random Trees & Decision Tree \\
     \hline
@@ -95,14 +127,23 @@ Onde n é o número de amostras de teste, $Erro_T$ é a porcentagem de erro do c
         PyramidORB-SIFT & 23,31\% & 29,41\% & 21,29\% & 44,72\% \\
         
     \hline
-\end{tabular}
-\bigskip
+  \end{tabular}
+  \bigskip
 
-É fácil deduzir da tabela que o classificador Bayesiano é melhor que os outros 3. De fato, ele foi melhor em todas as combinações de detector/extrator, exceto contra o Classificador Random Trees usando a combinação PyramidORB-SIFT.\\*
+  É fácil deduzir da tabela que o classificador Bayesiano é melhor que os outros
+  três. De fato, ele foi melhor em todas as combinações de detector/extrator,
+  exceto contra o Classificador Random Trees usando a combinação
+  \textit{PyramidORB-SIFT}.
 
-Abaixo segue uma tabela do tempo tomado para detecção de KeyPoints, extração de descritores e extração de histogramas. O tempo para criar o vocabulário e treino do classificador é ignorado aqui pois, como já mencionado, ambos o classificador e o vocabulário podem ser salvos em arquivos para uso posterior.\\*
+  Abaixo segue uma tabela do tempo total tomado para detecção de KeyPoints,
+  extração de descritores e extração de histogramas. O tempo para criar o
+  vocabulário e treino do classificador é ignorado aqui pois, como já
+  mencionado, ambos o classificador e o vocabulário podem ser salvos em arquivos
+  para uso posterior.
 
-\begin{tabular}{|c|c|c|}
+  \vspace{20pt}
+  \hspace{65pt}
+  \begin{tabular}{|c|c|c|}
     \hline
     Feature &  \multicolumn{2}{|c|}{Descriptor Extractor} \\
     \cline{2-3}
@@ -119,8 +160,10 @@ Abaixo segue uma tabela do tempo tomado para detecção de KeyPoints, extração
     \hline
   \end{tabular}
   \bigskip
+  \vspace{10pt}
 
-Abaixo seguem as matrizes de confusão de cada um dos melhores resultados de detector/extrator para cada classificador.\\*
+  Abaixo seguem as matrizes de confusão de cada um dos melhores resultados de
+  combinação detector/extrator para cada um dos classificadores usados.
 
   \hspace{-75pt}
   \begin{tabular}{|cc|c|c|c|c|c|c|c|}
@@ -147,7 +190,6 @@ Abaixo seguem as matrizes de confusão de cada um dos melhores resultados de det
   \end{tabular}
   \bigskip
   
-
   \hspace{-75pt}
   \begin{tabular}{|cc|c|c|c|c|c|c|c|}
     \hline
@@ -172,7 +214,6 @@ Abaixo seguem as matrizes de confusão de cada um dos melhores resultados de det
     \hline
   \end{tabular}
   \bigskip
-
 
   \hspace{-75pt}
   \begin{tabular}{|cc|c|c|c|c|c|c|c|}
@@ -199,8 +240,7 @@ Abaixo seguem as matrizes de confusão de cada um dos melhores resultados de det
   \end{tabular}
   \bigskip
 
-
-\hspace{-75pt}
+  \hspace{-75pt}
   \begin{tabular}{|cc|c|c|c|c|c|c|c|}
     \hline
     \multicolumn{2}{|c|}{Classificador Decision Tree} &
@@ -223,6 +263,15 @@ Abaixo seguem as matrizes de confusão de cada um dos melhores resultados de det
     & \multicolumn{1}{|c|}{Torre Eiffel} & 1 & 0 & 0 & 0 & 0 & 9\\
     \hline
   \end{tabular}
+  \vspace{20pt}
 
+  Uma observação que podemos fazer aqui é que, enquanto os classificadores
+  Bayesiano, K-Nearest Neighbors e Random Trees obtiveram matrizes de confusão
+  boas (o Bayesiano ainda sobressaindo-se), o de Decision Tree teve uma
+  particularmente pior. Ele errou todas as classificações de imagens da Muralha
+  da China. Provavelmente essa combinação específica de detector/extrator só foi
+  a melhor dele por acaso, e mesmo assim, como é possível observar na primeira
+  tabela, ainda ficou com um erro máximo de 44,72\%.
 
 \end{document}
+
